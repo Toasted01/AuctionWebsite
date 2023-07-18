@@ -1,0 +1,26 @@
+<?php require('template/header.phtml') ?>
+<div id="ContentBox">
+    <h1>All Auction Items: </h1>
+</div>
+<?php
+$items = new AuctionDataSet();
+echo "<table border='1' class='table table-hover'>";//makes the table
+echo "<th scope='col'>Auction number</th> <th scope='col'>Item</th> <th scope='col'>Seller</th> <th scope='col'>Highest Bidder</th> <th scope='col'>Current Bid</th> <th scope='col'>Start Date</th> <th scope='col'>End Date</th> <th scope='col'>Image 1</th> <th scope='col'>Image 2</th> <th scope='col'>Image 3</th> <th scope='col'>View</th>";
+$row=$items->getAllAuctions();
+for($i=0;$i<count($row);$i++)//cycles through each record and outputs each field individually
+{
+        echo"<tr class='table-active'> <td>".$row[$i]->getId()."</td>
+             <td>".$row[$i]->getItem()."</td> 
+             <td>".$row[$i]->getSeller()."</td> 
+             <td>".$row[$i]->getBidder()."</td> 
+             <td>£".$row[$i]->getBid()."</td> 
+             <td>".$row[$i]->getStart()."</td> 
+             <td>".$row[$i]->getEnd()."</td>
+             <td> <img src='images/".$row[$i]->getImage1()."'alt='no picture'/> </td>
+             <td> <img src='images/".$row[$i]->getImage2()."'alt='no picture'/> </td>
+             <td> <img src='images/".$row[$i]->getImage3()."'alt='no picture'/> </td>
+             <td> <form method='post' action=''><input type='hidden' value='$i' name='AuctionId'/><button type='submit' value='View Item' name='ViewButton'>View</button></form> </td> </tr>";//button to view the individual record
+}
+echo"</table>";
+?>
+<?php require('template/footer.phtml') ?>

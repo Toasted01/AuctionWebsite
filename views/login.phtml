@@ -1,0 +1,23 @@
+<?php require('template/header.phtml') ?>
+<!--form to login-->
+<form action="" method="post" class="col-lg-2">
+    <fieldset>
+        <div class="form-group">
+            <label for="Uname">Email address</label>
+            <input type="text" class="form-control" id="Uname" placeholder="Enter Username" name="Uname"><!--username input-->
+        </div>
+        <div class="form-group">
+            <label for="Pass">Password</label>
+            <input type="password" class="form-control" id="Pass" placeholder="Password" name="Pass"><!--password input-->
+        </div>
+        <button type="submit" class="btn btn-primary" id="loginButton" name="loginButton">Login</button><!--login button-->
+    </fieldset>
+</form>
+
+<hr/>
+
+<form method="post" class="col-lg-2">
+    <button type="submit" class="btn btn-primary" id="logoutButton" name="logoutButton">Logout</button><!--logout button-->
+</form>
+
+<?php require('template/footer.phtml') ?>

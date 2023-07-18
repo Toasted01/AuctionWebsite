@@ -1,0 +1,17 @@
+<?php require('template/header.phtml') ?>
+<!--form to sign up-->
+<form action="login.php" method="post" class="col-lg-2">
+    <fieldset>
+        <div class="form-group">
+            <label for="NewUname">Email address</label>
+            <input type="text" class="form-control" id="NewUname" placeholder="Enter Username" name="NewUname"><!--input for username-->
+        </div>
+        <div class="form-group">
+            <label for="NewPass">Password</label>
+            <input type="password" class="form-control" id="NewPass" placeholder="Password" name="NewPass"><!--input for password-->
+        </div>
+        <button type="submit" class="btn btn-primary" id="signupButton" name="signupButton">Submit</button><!--sign up button-->
+    </fieldset>
+</form>
+
+<?php require('template/footer.phtml') ?>

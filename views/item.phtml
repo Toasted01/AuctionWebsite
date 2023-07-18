@@ -1,0 +1,110 @@
+<?php require('template/header.phtml') ?>
+<script >
+    <?php require_once("js/watch.js"); ?>
+</script>
+<?php
+
+$items = new AuctionDataSet();
+$row=$items->getAuctions($_SESSION["ThisItem"]);//gets the record from the database query and assigns it to an object
+$highBid=$row[0]->getBid();//gets the current highest bid (there is an error on this line when pressing the bid button but it doesnt stop the new bid so it has been worked around)
+$theId=$row[0]->getId();//gets the auction id
+
+echo "<div id='status'></div>
+        <h2 class='text-center'>Auction number: ".$row[0]->getId()."</h2>
+        <div class='text-center'><!--all text outputs-->
+             <p>Item: ".$row[0]->getItem()."</p> 
+             <p>Seller: ".$row[0]->getSeller()."</p>
+             <p>Auction start: ".$row[0]->getStart()."</p> 
+             <p>Auction end: ".$row[0]->getEnd()."</p>
+        </div> 
+        <div class='text-center'> <!--all images-->
+            <img src='images/".$row[0]->getImage1()."'alt='no picture'/>
+            <img src='images/".$row[0]->getImage2()."'alt='no picture'/>
+            <img src='images/".$row[0]->getImage3()."'alt='no picture'/>
+        </div>
+        <p id='timer'>Time left:</p>
+        <p id='timer'></p>
+        <p id='leader'></p>
+        <style>
+            #timer, #leader{
+            text-align: center;
+            font-size: 60px;
+            margin-top: 0px;
+            }
+        </style>
+        <script >
+            function bidding(str){ //live updates for highest bidder and bid
+
+                let xmlhttp = new XMLHttpRequest();
+
+                xmlhttp.onreadystatechange = function (){
+                    if (this.readyState == 4 && this.status == 200){
+                        let item = JSON.parse(this.responseText);
+                        let uic = document.getElementById('leader');
+                        uic.innerHTML = '';
+                        item.forEach(function (obj) {
+                                let answer = '".@$_SESSION['login']."';//gets the name of the user logged in
+                                if (answer=obj._bidder){ //checks if the user logged in is th highest bidder
+                                    W();
+                                }
+                                else{
+                                    L();
+                                }
+                                uic.innerHTML += 'Highest bidder: ' + obj._bidder + ' at £' +obj._bid;//creates the text to go into <p id='leader'>
+                            }
+                        );
+                    }
+                };
+
+                let uic = document.getElementById('leader');
+                xmlhttp.open('GET', 'Ajax/ajaxBidding.php?q=' + str + '&token=".$_SESSION['ajaxToken']."', true);//opens ajax bidding and sends auction id
+                xmlhttp.send();
+                return;
+            }
+        </script>
+        <script>
+            // Set the date it's counting down to
+            let end = new Date('".$row[0]->getEnd()."'); //creates a date using the auction end date
+            // Update the countdown
+            let x = setInterval(function() {//interval updates every second
+                
+                bidding('".$row[0]->getId()."');//refreshes the highest bidder and bid by calling the function above and sending the auction id
+                
+                // Get today's date
+                let now = new Date()
+                //Distance between now and the count down date
+                let distance = end - now;
+                // Time calculations for days, hours, minutes and seconds
+                let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                // Display the timer 
+                document.getElementById('timer').innerHTML = days + 'd ' + hours + 'h '
+                    + minutes + 'm ' + seconds + 's ';
+                // If the count down is finished say expired, remove the bidding form and show an alert of who won
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById('timer').innerHTML = 'Expired';
+                    document.getElementById('bidding').style.display = 'none';
+                    alert('! ".$row[0]->getBidder()." is the winner !');
+                }
+            }, 1000);
+        </script>  
+        <div id='bidding'><!--bidding-->
+        <form action='' method='post' class='col-lg-2' class='text-center'>
+            <fieldset>
+                <div class='form-group'>
+                    <label for='Bid'>V Enter bid V</label>
+                    <input type='number' class='form-control' id='Bid' name='Bid'><!--input field for the new bid-->
+                    <input type='hidden' value='" . $highBid . "' name='oldBid'/><!--input for the current highest bid-->
+                    <input type='hidden' value='" . $theId . "' name='theId'/><!--input for the auction id-->
+                </div>
+                <button type='submit' class='btn btn-primary' id='loginButton' name='loginButton'>Bid</button><!--bid button-->
+            </fieldset>
+        </form>
+        </div>
+        ";
+?>
+
+<?php require('template/footer.phtml') ?>

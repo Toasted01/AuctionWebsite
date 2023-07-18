@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Sell and Buy">
+    <meta name="author" content="Thomas Burns">
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+
+    <title>Auction House</title>
+</head>
+
+<body role="document">
+
+<?php
+    $token = substr(str_shuffle(MD5(microtime())), 0, 20);//creates a unique md5 token
+    $_SESSION["ajaxToken"] = $token;//assigns it to the session
+?>
+
+<!--navigation bar-->
+<nav class="navbar navbar-expand navbar-dark bg-primary">
+    <a class="navbar-brand" href="index.php">Auction House</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="index.php">Home
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="login.php">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="signup.php">Sign up</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="auction.php">Auctions</a>
+            </li>
+        </ul>
+    </div>
+    <script >
+        <?php require_once("js/search.js"); ?>//requires the search javascript file
+    </script>
+    <div class="form-inline">
+        <form action="../item.php" method="post" class="form-inline my-2 my-lg-0">
+            <fieldset>
+                <input type="text" class="form-control mr-sm-2" id="search" placeholder="Search" name="search" onkeyup="showHint(this.value)" onblur="hide()"/> <!--onkeyup shows the hints when the key is let up. onblur hides the hints when you click away-->
+                <ul class="list-group" id='txtHint'></ul>
+                <!--styling for the hint drop down-->
+                <style>
+                    #txtHint{
+                        color:black;
+                        list-style: none;
+                        border: solid 2px grey;
+                        border-radius: 5px;
+                        background: white;
+                        position: absolute;
+                        top: 55px;
+                        z-index: 9999;
+                    }
+                </style>
+                <span>show images</span> <!--the show images check box which toggles on/off thumbnails for items-->
+                <input class="form-control" id="showimages" type="checkbox" style="margin:1px">
+                <button type="submit" class="btn btn-primary" id="searchButton" name="searchButton">Search</button>
+            </fieldset>
+        </form>
+    </div>
+</nav>
+
+
+
